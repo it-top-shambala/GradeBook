@@ -173,6 +173,163 @@ FROM table_student_marks
          JOIN table_marks
               ON table_student_marks.mark_id = table_marks.id;
 
+-- FUNCTIONS & PROCEDURES
+CREATE FUNCTION function_is_not_exist_person(
+    IN last_name TEXT,
+    IN first_name TEXT,
+    IN date_of_birth DATE)
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+AS $$
+    DECLARE
+        count INTEGER;
+
+    BEGIN
+        SELECT COUNT(*)
+        INTO count
+        FROM table_persons
+        WHERE table_persons.last_name = function_is_not_exist_person.last_name
+          AND table_persons.first_name = function_is_not_exist_person.first_name
+          AND table_persons.date_of_birth = function_is_not_exist_person.date_of_birth;
+
+        IF (count = 0) THEN
+            RETURN TRUE;
+        ELSE
+            RETURN FALSE;
+        END IF;
+    END;
+$$;
+
+CREATE FUNCTION function_insert_person(
+    IN last_name TEXT,
+    IN first_name TEXT,
+    IN date_of_birth DATE)
+RETURNS INTEGER
+LANGUAGE plpgsql
+AS $$
+    DECLARE
+        isNot BOOLEAN;
+        outId INTEGER;
+
+    BEGIN
+        isNot := function_is_not_exist_person(function_insert_person.last_name, function_insert_person.first_name,
+                                              function_insert_person.date_of_birth);
+
+        IF (isNot) THEN
+            INSERT INTO table_persons(last_name, first_name, date_of_birth)
+            VALUES (function_insert_person.last_name,
+                    function_insert_person.first_name,
+                    function_insert_person.date_of_birth);
+        END IF;
+
+        SELECT table_persons.id
+        INTO outId
+        FROM table_persons
+        WHERE table_persons.last_name = function_insert_person.last_name
+          AND table_persons.first_name = function_insert_person.first_name
+          AND table_persons.date_of_birth = function_insert_person.date_of_birth;
+
+        RETURN outId;
+    END;
+$$;
+
+CREATE FUNCTION function_is_not_exist_group(IN group_name TEXT)
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+AS $$
+    DECLARE
+        count INTEGER;
+
+    BEGIN
+        SELECT COUNT(*)
+        INTO count
+        FROM table_groups
+        WHERE table_groups.name = function_is_not_exist_group.group_name;
+
+        IF (count = 0) THEN
+            RETURN TRUE;
+        ELSE
+            RETURN FALSE;
+        END IF;
+    END;
+$$;
+
+CREATE FUNCTION function_insert_group(IN group_name TEXT)
+RETURNS INTEGER
+LANGUAGE plpgsql
+AS $$
+    DECLARE
+        isNot BOOLEAN;
+        outId INTEGER;
+
+    BEGIN
+        isNot := function_is_not_exist_group(function_insert_group.group_name);
+
+        IF (isNot) THEN
+            INSERT INTO table_groups(name) VALUES (function_insert_group.group_name);
+        END IF;
+
+        SELECT table_groups.id
+        INTO outId
+        FROM table_groups
+        WHERE table_groups.name = function_insert_group.group_name;
+
+        RETURN outId;
+    END;
+$$;
+
+CREATE FUNCTION function_is_not_exist_student(
+    IN person_id INTEGER,
+    IN group_id INTEGER)
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+AS $$
+    DECLARE
+        count INTEGER;
+
+    BEGIN
+        SELECT COUNT(*)
+        INTO count
+        FROM table_students
+        WHERE table_students.person_id = function_is_not_exist_student.person_id AND
+              table_students.group_id = function_is_not_exist_student.group_id;
+
+        IF (count = 0) THEN
+            RETURN TRUE;
+        ELSE
+            RETURN FALSE;
+        END IF;
+    END;
+$$;
+
+CREATE PROCEDURE procedure_insert_student(
+    IN last_name TEXT,
+    IN first_name TEXT,
+    IN date_of_birth DATE,
+    IN group_name TEXT)
+    LANGUAGE plpgsql
+AS $$
+    DECLARE
+        person_id INTEGER;
+        group_id INTEGER;
+        isNot BOOLEAN;
+
+    BEGIN
+        person_id := function_insert_person(
+                procedure_insert_student.last_name,
+                procedure_insert_student.first_name,
+                procedure_insert_student.date_of_birth);
+
+        group_id := function_insert_group(procedure_insert_student.group_name);
+
+        isNot := function_is_not_exist_student(person_id, group_id);
+        IF (isNot) THEN
+            INSERT INTO table_students(person_id, group_id) VALUES (person_id, group_id);
+        END IF;
+    END;
+$$;
+
+
 -- TEST DATA
 INSERT INTO table_groups(name)
 VALUES ('G-01'),
