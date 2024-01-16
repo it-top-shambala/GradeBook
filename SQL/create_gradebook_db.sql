@@ -307,7 +307,7 @@ CREATE PROCEDURE procedure_insert_student(
     IN first_name TEXT,
     IN date_of_birth DATE,
     IN group_name TEXT)
-    LANGUAGE plpgsql
+LANGUAGE plpgsql
 AS $$
     DECLARE
         person_id INTEGER;
