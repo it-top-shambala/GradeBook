@@ -1,5 +1,6 @@
 .idea/
 .qtc_clangd/
+debug/
 
 # Created by https://www.toptal.com/developers/gitignore/api/qt
 # Edit at https://www.toptal.com/developers/gitignore?templates=qt
