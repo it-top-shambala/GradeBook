@@ -10,7 +10,8 @@ private:
     QSqlDatabase _db;
 
 public:
-    DbContext(const QString& server,
+    DbContext(const QString& provider,
+              const QString& server,
               const QString& databaseName,
               const QString& userName,
               const QString& password);

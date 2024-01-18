@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include "dbcontext.h"
+#include "dbconfig.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -9,7 +10,12 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    auto db = new DbContext("localhost", "gradebook_db", "postgres", "1234");
+    auto config = new DbConfig("db_config.json");
+    auto db = new DbContext(config->provider(),
+                            config->hostName(),
+                            config->dbName(),
+                            config->userName(),
+                            config->password());
     ui->selectGroup->addItems(db->getAllGroups());
 }
 

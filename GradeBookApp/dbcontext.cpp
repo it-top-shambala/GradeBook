@@ -1,10 +1,11 @@
 #include "dbcontext.h"
 
-DbContext::DbContext(const QString& server,
+DbContext::DbContext(const QString& provider,
+                     const QString& server,
                      const QString& databaseName,
                      const QString& userName,
                      const QString& password) {
-    _db = QSqlDatabase::addDatabase("QPSQL");
+    _db = QSqlDatabase::addDatabase(provider);
     _db.setConnectOptions();
     _db.setHostName(server);
     _db.setDatabaseName(databaseName);
