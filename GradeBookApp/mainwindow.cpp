@@ -1,3 +1,4 @@
+#include "comboboxitemdelegate.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -42,6 +43,17 @@ void MainWindow::on_selectGroup_currentTextChanged(const QString &arg1)
     foreach (auto student, students) {
         _model->setItem(row++, 0, new QStandardItem(student));
     }
+
+    QAbstractItemModel *marks = new QStandardItemModel();
+    //TODO
+
+    //marks->setData(0, );
+    ComboBoxItemDelegate *delegate = new ComboBoxItemDelegate(ui->tableStudentsMarks);
+    delegate->setModel(marks);
+    delegate->setModelKeyColumn(0);
+    delegate->setModelViewColumn(1);
+
+    ui->tableStudentsMarks->setItemDelegateForColumn(1, delegate);
 
     ui->tableStudentsMarks->setModel(_model);
 }
