@@ -7,7 +7,9 @@
 class DbContext
 {
 private:
-    QSqlDatabase _db;
+    QSqlDatabase* _db;
+
+    QList<QString>* getAllNames(const QString& sql);
 
 public:
     DbContext(const QString& provider,
@@ -17,7 +19,11 @@ public:
               const QString& password);
     ~DbContext();
 
-    QList<QString> getAllGroups();
+    QList<QString>* getAllGroups();
+    QList<QString>* getAllTeachers();
+    QList<QString>* getAllStudents(const QString& groupName);
+    QList<QString>* getAllSubjects(const QString& teacherName);
+    QList<QString>* getAllLessons(const QString& subjectName);
 };
 
 #endif // DBCONTEXT_H
