@@ -20,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->selectGroup->addItems(groups);
     ui->selectTeacher->addItems(teachers);
-
 }
 
 MainWindow::~MainWindow()
@@ -31,8 +30,21 @@ MainWindow::~MainWindow()
 void MainWindow::on_selectGroup_currentTextChanged(const QString &arg1)
 {
     _selectedGroup = arg1;
-}
 
+    auto students = *(_db->getAllStudents(_selectedGroup));
+
+    _model = new QStandardItemModel(students.size(), 2);
+
+    _model->setHeaderData(0, Qt::Horizontal, "Student name");
+    _model->setHeaderData(1, Qt::Horizontal, "Mark");
+
+    int row = 0;
+    foreach (auto student, students) {
+        _model->setItem(row++, 0, new QStandardItem(student));
+    }
+
+    ui->tableStudentsMarks->setModel(_model);
+}
 
 void MainWindow::on_selectTeacher_currentTextChanged(const QString &arg1)
 {

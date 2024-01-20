@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QStandardItemModel>
 
 #include "dbcontext.h"
 #include "dbconfig.h"
@@ -39,5 +40,7 @@ private:
     QString _selectedLesson;
 
     DbContext* _db;
+
+    QStandardItemModel* _model;
 };
 #endif // MAINWINDOW_H

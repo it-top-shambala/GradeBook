@@ -71,6 +71,16 @@
      <string>Урок</string>
     </property>
    </widget>
+   <widget class="QTableView" name="tableStudentsMarks">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>60</y>
+      <width>760</width>
+      <height>520</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
