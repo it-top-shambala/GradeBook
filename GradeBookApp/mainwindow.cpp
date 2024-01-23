@@ -1,4 +1,3 @@
-#include "comboboxitemdelegate.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -7,6 +6,15 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    connect(ui->selectGroup, &QComboBox::currentTextChanged, this, &MainWindow::onSelectGroupCurrentChanged);
+    connect(ui->selectTeacher, &QComboBox::currentTextChanged, this, &MainWindow::onSelectTeacherCurrentChanged);
+    connect(ui->selectSubject, &QComboBox::currentTextChanged, this, &MainWindow::onSelectSubjectCurrentChanged);
+    connect(ui->selectLesson, &QComboBox::currentTextChanged, this, &MainWindow::onSelectLessonCurrentChanged);
+
+    connect(this, &MainWindow::signalCurrentMark, this, &MainWindow::onChangedMark);
+
+    formLayout = new QFormLayout(ui->widgetStudentMarks);
 
     auto config = new DbConfig("db_config.json");
     _db = new DbContext(config->provider(),
@@ -17,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto groups = *(_db->getAllGroups());
     auto teachers = *(_db->getAllTeachers());
+    _marks = *(_db->getAllMarks());
 
 
     ui->selectGroup->addItems(groups);
@@ -28,54 +37,48 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_selectGroup_currentTextChanged(const QString &arg1)
+void MainWindow::onSelectGroupCurrentChanged(const QString &group)
 {
-    _selectedGroup = arg1;
+    _selectedGroup = group;
 
     auto students = *(_db->getAllStudents(_selectedGroup));
 
-    _model = new QStandardItemModel(students.size(), 2);
-
-    _model->setHeaderData(0, Qt::Horizontal, "Student name");
-    _model->setHeaderData(1, Qt::Horizontal, "Mark");
-
-    int row = 0;
-    foreach (auto student, students) {
-        _model->setItem(row++, 0, new QStandardItem(student));
+    for (int i = formLayout->rowCount() - 1; i >= 0; --i) {
+        formLayout->removeRow(i);
     }
 
-    QAbstractItemModel *marks = new QStandardItemModel();
-    //TODO
+    foreach (auto student, students) {
+        selectMark = new QComboBox();
+        selectMark->addItems(_marks);
+        connect(selectMark, &QComboBox::currentTextChanged, this, [&]{ //TODO
+            emit signalCurrentMark(selectMark, student);
+        });
 
-    //marks->setData(0, );
-    ComboBoxItemDelegate *delegate = new ComboBoxItemDelegate(ui->tableStudentsMarks);
-    delegate->setModel(marks);
-    delegate->setModelKeyColumn(0);
-    delegate->setModelViewColumn(1);
-
-    ui->tableStudentsMarks->setItemDelegateForColumn(1, delegate);
-
-    ui->tableStudentsMarks->setModel(_model);
+        formLayout->addRow(student, selectMark);
+    }
 }
 
-void MainWindow::on_selectTeacher_currentTextChanged(const QString &arg1)
+void MainWindow::onSelectTeacherCurrentChanged(const QString &teacher)
 {
-    _selectedTeacher = arg1;
+    _selectedTeacher = teacher;
 
     auto subjects = *(_db->getAllSubjects(_selectedTeacher));
     ui->selectSubject->addItems(subjects);
 }
 
-void MainWindow::on_selectSubject_currentTextChanged(const QString &arg1)
+void MainWindow::onSelectSubjectCurrentChanged(const QString &subject)
 {
-    _selectedSubject = arg1;
+    _selectedSubject = subject;
 
     auto lessons = *(_db->getAllLessons(_selectedSubject));
     ui->selectLesson->addItems(lessons);
 }
 
-void MainWindow::on_selectLesson_currentTextChanged(const QString &arg1)
+void MainWindow::onSelectLessonCurrentChanged(const QString &lesson)
 {
-    _selectedLesson = arg1;
+    _selectedLesson = lesson;
 }
 
+void MainWindow::onChangedMark(const QComboBox *mark, const QString &student) {
+    QMessageBox::information(this, "", student + " " + mark->currentText());
+}

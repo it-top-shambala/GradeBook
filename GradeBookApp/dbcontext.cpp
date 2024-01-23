@@ -64,3 +64,9 @@ QList<QString> *DbContext::getAllLessons(const QString& subjectName)
     auto sql = "SELECT title FROM view_lessons WHERE subject = '" + subjectName + "';";
     return getAllNames(sql);
 }
+
+QList<QString> *DbContext::getAllMarks()
+{
+    auto sql = "SELECT mark FROM table_marks;";
+    return getAllNames(sql);
+}

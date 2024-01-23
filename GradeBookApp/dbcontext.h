@@ -24,6 +24,7 @@ public:
     QList<QString>* getAllStudents(const QString& groupName);
     QList<QString>* getAllSubjects(const QString& teacherName);
     QList<QString>* getAllLessons(const QString& subjectName);
+    QList<QString>* getAllMarks();
 };
 
 #endif // DBCONTEXT_H

@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
-#include <QStandardItemModel>
+#include <QtWidgets>
 
 #include "dbcontext.h"
 #include "dbconfig.h"
@@ -22,14 +22,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    void signalCurrentMark(const QComboBox *mark, const QString &student);
+
 private slots:
-    void on_selectSubject_currentTextChanged(const QString &arg1);
-
-    void on_selectGroup_currentTextChanged(const QString &arg1);
-
-    void on_selectTeacher_currentTextChanged(const QString &arg1);
-
-    void on_selectLesson_currentTextChanged(const QString &arg1);
+    void onSelectGroupCurrentChanged(const QString &group);
+    void onSelectTeacherCurrentChanged(const QString &teacher);
+    void onSelectSubjectCurrentChanged(const QString &subject);
+    void onSelectLessonCurrentChanged(const QString &lesson);
+    void onChangedMark(const QComboBox *mark, const QString &student);
 
 private:
     Ui::MainWindow *ui;
@@ -41,6 +42,9 @@ private:
 
     DbContext* _db;
 
-    QStandardItemModel* _model;
+    QFormLayout* formLayout;
+    QComboBox* selectMark;
+
+    QList<QString> _marks;
 };
 #endif // MAINWINDOW_H

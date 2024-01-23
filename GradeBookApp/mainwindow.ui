@@ -71,13 +71,13 @@
      <string>Урок</string>
     </property>
    </widget>
-   <widget class="QTableView" name="tableStudentsMarks">
+   <widget class="QWidget" name="widgetStudentMarks" native="true">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>60</y>
-      <width>760</width>
-      <height>520</height>
+      <width>450</width>
+      <height>500</height>
      </rect>
     </property>
    </widget>
