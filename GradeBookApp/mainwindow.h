@@ -22,15 +22,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-signals:
-    void signalCurrentMark(const QComboBox *mark, const QString &student);
-
 private slots:
     void onSelectGroupCurrentChanged(const QString &group);
     void onSelectTeacherCurrentChanged(const QString &teacher);
     void onSelectSubjectCurrentChanged(const QString &subject);
     void onSelectLessonCurrentChanged(const QString &lesson);
-    void onChangedMark(const QComboBox *mark, const QString &student);
+    void onChangedMark();
 
 private:
     Ui::MainWindow *ui;
@@ -46,5 +43,7 @@ private:
     QComboBox* selectMark;
 
     QList<QString> _marks;
+
+    QMap<QString, QComboBox*>* _map;
 };
 #endif // MAINWINDOW_H
