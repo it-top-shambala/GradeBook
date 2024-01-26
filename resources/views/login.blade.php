@@ -3,7 +3,7 @@
 @section('content')
 <x-forms.form action="/user" title="Вход">
     <x-forms.formItem>
-        <x-forms.label>{{__('Имя*')}}</x-forms.label>
+        <x-forms.label>{{__('mail/телефон*')}}</x-forms.label>
         <x-forms.input autofocus/>
     </x-forms.formItem>
     <x-forms.formItem>

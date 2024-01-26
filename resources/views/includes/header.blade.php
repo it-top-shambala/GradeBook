@@ -10,15 +10,29 @@
                 </li>
             </ul>
         </div>
-        <div class="">
+        @if (session('user'))
+        <div>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a href="/login" class="nav-link {{activlink('login')}}">{{__('Войти')}}</a>
+                    <a href="/order" class="nav-link {{activlink('order')}}">{{__('мои заказы')}}</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/registration" class="nav-link {{activlink('registration')}}">{{__('Регистрация')}}</a>
+                    <a href="/registration" class="nav-link {{activlink('registration')}}">{{__('поиск заказов')}}</a>
                 </li>
             </ul>
         </div>
+        @else
+            <div class="">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a href="/login" class="nav-link {{activlink('login')}}">{{__('Войти')}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/registration" class="nav-link {{activlink('registration')}}">{{__('Регистрация')}}</a>
+                    </li>
+                </ul>
+            </div>
+        @endif
+
     </nav>
 </header>

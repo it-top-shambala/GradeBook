@@ -29,5 +29,9 @@ $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
 );
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
+if (!class_exists('Redis')) {
+    class_alias('Illuminate\Support\Facades\Redis', 'Redis');
+}
 
 return $app;
