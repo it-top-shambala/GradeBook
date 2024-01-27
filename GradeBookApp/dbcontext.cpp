@@ -70,3 +70,12 @@ QList<QString> *DbContext::getAllMarks()
     auto sql = "SELECT mark FROM table_marks;";
     return getAllNames(sql);
 }
+
+void DbContext::insertMark(const QDate *date, const QString &student, const QString &teacher, const QString &lesson, const QString &mark)
+{
+    _db->open();
+    auto query = new QSqlQuery();
+    auto sql = "CALL procedure_insert_mark('" + date->toString("yyyy-MM-dd") + "', '" + student + "', '" + teacher + "', '" + lesson + "', '" + mark + "')";
+    query->exec(sql);
+    _db->close();
+}

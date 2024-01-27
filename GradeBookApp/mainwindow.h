@@ -6,7 +6,6 @@
 #include <QtWidgets>
 
 #include "dbcontext.h"
-#include "dbconfig.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,7 +26,7 @@ private slots:
     void onSelectTeacherCurrentChanged(const QString &teacher);
     void onSelectSubjectCurrentChanged(const QString &subject);
     void onSelectLessonCurrentChanged(const QString &lesson);
-    void onChangedMark();
+    void onSave();
 
 private:
     Ui::MainWindow *ui;

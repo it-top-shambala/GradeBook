@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "dbconfig.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -11,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->selectTeacher, &QComboBox::currentTextChanged, this, &MainWindow::onSelectTeacherCurrentChanged);
     connect(ui->selectSubject, &QComboBox::currentTextChanged, this, &MainWindow::onSelectSubjectCurrentChanged);
     connect(ui->selectLesson, &QComboBox::currentTextChanged, this, &MainWindow::onSelectLessonCurrentChanged);
+    connect(ui->buttonSave, &QPushButton::clicked, this, &MainWindow::onSave);
 
     formLayout = new QFormLayout(ui->widgetStudentMarks);
 
@@ -51,7 +53,6 @@ void MainWindow::onSelectGroupCurrentChanged(const QString &group)
     foreach (auto student, students) {
         selectMark = new QComboBox();
         selectMark->addItems(_marks);
-        connect(selectMark, &QComboBox::currentTextChanged, this, &MainWindow::onChangedMark);
 
         _map->insert(student, selectMark);
         formLayout->addRow(student, selectMark);
@@ -79,11 +80,17 @@ void MainWindow::onSelectLessonCurrentChanged(const QString &lesson)
     _selectedLesson = lesson;
 }
 
-void MainWindow::onChangedMark() {
+void MainWindow::onSave()
+{
+    auto date = ui->calendar->selectedDate();
     for (auto i = _map->cbegin(), end = _map->cend(); i != end; ++i){
         auto student = i.key();
         auto mark = i.value()->currentText();
 
-        QMessageBox::information(this, "", student + " " + mark);
+        auto output = "CALL procedure_insert_mark('" + date.toString("yyyy-MM-dd") + "', '" + student + "', '" + _selectedTeacher + "', '" + _selectedLesson + "', '" + mark + "')";
+        QMessageBox::information(this, "", output);
+
+        _db->insertMark(&date, student, _selectedTeacher, _selectedLesson, mark);
     }
 }
+

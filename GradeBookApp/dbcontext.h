@@ -25,6 +25,8 @@ public:
     QList<QString>* getAllSubjects(const QString& teacherName);
     QList<QString>* getAllLessons(const QString& subjectName);
     QList<QString>* getAllMarks();
+
+    void insertMark(const QDate* date, const QString& student, const QString& teacher, const QString& lesson, const QString& mark);
 };
 
 #endif // DBCONTEXT_H

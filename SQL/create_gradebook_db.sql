@@ -329,6 +329,46 @@ AS $$
     END;
 $$;
 
+CREATE PROCEDURE procedure_insert_mark(
+    IN date DATE,
+    IN student_name TEXT,
+    IN teacher_name TEXT,
+    IN lesson_name TEXT,
+    IN mark_name TEXT)
+LANGUAGE plpgsql
+AS $$
+    DECLARE
+        id_student INTEGER;
+        id_teacher INTEGER;
+        id_lesson INTEGER;
+        id_mark INTEGER;
+
+    BEGIN
+        SELECT id
+        INTO id_student
+        FROM view_students
+        WHERE concat_ws(' ', last_name, first_name) = student_name;
+
+        SELECT id
+        INTO id_teacher
+        FROM view_teachers
+        WHERE concat_ws(' ', last_name, first_name) = teacher_name;
+
+        SELECT id
+        INTO id_lesson
+        FROM view_lessons
+        WHERE title = lesson_name;
+
+        SELECT id
+        INTO id_mark
+        FROM table_marks
+        WHERE mark = mark_name;
+
+        INSERT INTO table_student_marks(date, student_id, teacher_id, lesson_id, mark_id)
+        VALUES (procedure_insert_mark.date, id_student, id_teacher, id_lesson, id_mark);
+    END;
+$$;
+
 
 -- TEST DATA
 INSERT INTO table_groups(name)
