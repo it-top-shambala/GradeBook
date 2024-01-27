@@ -6,14 +6,14 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class a extends Component
+class ul extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct(public string $path, public string $value,)
+    public function __construct()
     {
-
+        //
     }
 
     /**
@@ -21,6 +21,6 @@ class a extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.a');
+        return view('components.ul');
     }
 }

@@ -1,37 +1,19 @@
 <header class="border-bottom border-primary border-2 row justify-content-center ">
     <nav class="d-flex justify-content-between navbar navbar-expand-lg bg-body-tertiary col-9 bg-success-subtle">
-        <div class="">
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a href="/" class="nav-link {{activlink('home')}}">{{__('Главная')}}</a>
-                </li>
-                <li class="nav-item">
-                    <a href="/about" class="nav-link {{activlink('about')}}">{{__('о нас')}}</a>
-                </li>
-            </ul>
-        </div>
+        <x-ul>
+            <x-lia :path="__('home')" :value="__('Главная')"/>
+            <x-lia x-a :path="__('about')" :value="__('О нас')"/>
+        </x-ul>
         @if (session('user'))
-        <div>
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a href="/order" class="nav-link {{activlink('order')}}">{{__('мои заказы')}}</a>
-                </li>
-                <li class="nav-item">
-                    <a href="/registration" class="nav-link {{activlink('registration')}}">{{__('поиск заказов')}}</a>
-                </li>
-            </ul>
-        </div>
+            <x-ul>
+                <x-lia :path="__('order')" :value="__('мои заказы')"/>
+                <x-lia x-a :path="__('search_orders')" :value="__('поиск заказов')"/>
+            </x-ul>
         @else
-            <div class="">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a href="/login" class="nav-link {{activlink('login')}}">{{__('Войти')}}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/registration" class="nav-link {{activlink('registration')}}">{{__('Регистрация')}}</a>
-                    </li>
-                </ul>
-            </div>
+            <x-ul>
+                <x-lia :path="__('login')" :value="__('Войти')"/>
+                <x-lia :path="__('registration')" :value="__('Регистрация')"/>
+            </x-ul>
         @endif
 
     </nav>
